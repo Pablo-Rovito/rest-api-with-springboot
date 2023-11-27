@@ -1,14 +1,14 @@
 package com.techu.apitechu.models;
 
-public class Product {
+public class ProductModel {
     public String id;
     private String description;
-    private float price;
+    private Float price;
 
-    public Product() {
+    public ProductModel() {
     }
 
-    public Product(String id, String description, float price) {
+    public ProductModel(String id, String description, Float price) {
         this.id = id;
         this.description = description;
         this.price = price;
@@ -34,7 +34,7 @@ public class Product {
         return description;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 }
