@@ -21,21 +21,24 @@ public class ApitechuApplication {
 				new ProductModel(
 						"0",
 						"Producto 0",
-						5f
+						5f,
+						null
 				)
 		);
 		result.add(
 				new ProductModel(
 						"10",
 						"Producto 10",
-						10f
+						10f,
+						null
 				)
 		);
 		result.add(
 				new ProductModel(
 						"20",
 						"Producto 20",
-						100f
+						100f,
+						null
 				)
 		);
 		return result;

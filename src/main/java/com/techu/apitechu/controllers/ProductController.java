@@ -1,6 +1,7 @@
 package com.techu.apitechu.controllers;
 
 import com.techu.apitechu.ApitechuApplication;
+import com.techu.apitechu.error.ProductException;
 import com.techu.apitechu.models.ProductModel;
 import com.techu.apitechu.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,23 @@ public class ProductController {
     @GetMapping(API_BASE_URL + "/products/{id}")
     public ResponseEntity<ProductModel> getProductById(@PathVariable String id) {
         System.out.printf("%n%s.getProductById(%s)", NAME, id);
+        try {
+            ProductModel response = productService.findById(id);
+            return ResponseEntity.ok(response);
+        } catch (ProductException exception) {
+            ProductModel response = new ProductModel();
+            response.setMessage(exception.getMessage());
+            return new ResponseEntity<>(
+                response,
+                HttpStatus.NOT_FOUND
+            );
+        }
 
-        Optional<ProductModel> response = productService.findById(id);
 
-        return new ResponseEntity<>(
-                response.orElse(new ProductModel("Error", "Not found", null)),
-                response.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND
-        );
+
     }
 
-    // TODO: Throw error instead of returning ProductModel with error
+    // TODO: Throw ProductError instead of returning ProductModel with error msg
     @PostMapping(API_BASE_URL + "/products")
     public ResponseEntity<ProductModel> createProduct(
             @RequestBody ProductModel productModel
@@ -48,7 +56,7 @@ public class ProductController {
 
         Optional<ProductModel> response = productService.createProduct(productModel);
         return new ResponseEntity<>(
-                response.orElse(new ProductModel("Error", "not created", null)),
+                response.orElse(new ProductModel("Error", "not created", null, null)),
                 response.isPresent() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
@@ -62,7 +70,8 @@ public class ProductController {
             @PathVariable String id
     ) {
         System.out.printf("%n%s.updateProduct(%s)", NAME, id);
-        if(!id.equals(productModel.getId())) return new ProductModel("Error", "Ids don´t match", 0f);
+        // TODO: throw ProductError
+        if(!id.equals(productModel.getId())) return new ProductModel("Error", "Ids don´t match", null, null);
 
         AtomicReference<Boolean> success = new AtomicReference<>(false);
         ApitechuApplication.productList.forEach(
@@ -73,7 +82,8 @@ public class ProductController {
                                 success.set(true);
                             }
                         });
-        if(!success.get()) return new ProductModel("Error", "product not found", 0f);
+        // TODO: Throw ProductError
+        if(!success.get()) return new ProductModel("Error", "product not found", null, null);
         return productModel;
     }
 
@@ -85,6 +95,7 @@ public class ProductController {
             @RequestBody ProductModel productModel,
             @PathVariable String id
     ) {
+        // TODO: replace with souf
         System.out.println("patchProduct");
 
         System.out.printf("%nId del producto a actualizar es %s", id);
@@ -101,7 +112,8 @@ public class ProductController {
                         success.set(true);
                     }
                 });
-        if(!success.get()) return new ProductModel("Error", "product not found", 0f);
+        // TODO: throw ProductError
+        if(!success.get()) return new ProductModel("Error", "product not found", null, null);
         return productModel;
     }
 
@@ -109,15 +121,16 @@ public class ProductController {
     public ProductModel deleteProduct(
             @PathVariable String id
     ) {
+        // TODO: replace with souf
         System.out.println("deleteProduct controller");
-
+        // TODO: throw ProductError
         ProductModel result = ApitechuApplication.productList
                 .stream()
                 .filter(productModel -> id.equals(productModel.getId()))
                 .findAny()
                 .orElse(new ProductModel(
                         "Error",
-                        String.format("No product with id %s found", id), 0f)
+                        String.format("No product with id %s found", id), null, null)
                 );
 
         ApitechuApplication.productList.removeIf(p -> id.equals(p.getId()));

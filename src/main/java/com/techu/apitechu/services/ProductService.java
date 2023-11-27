@@ -1,5 +1,6 @@
 package com.techu.apitechu.services;
 
+import com.techu.apitechu.error.ProductException;
 import com.techu.apitechu.models.ProductModel;
 import com.techu.apitechu.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<ProductModel> findById(String id) {
+    public ProductModel findById(String id) throws ProductException {
         System.out.printf("%n%s.findById(%s)", NAME, id);
         return productRepository.findById(id);
     }
