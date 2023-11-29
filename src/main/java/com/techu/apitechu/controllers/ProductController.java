@@ -5,6 +5,7 @@ import com.techu.apitechu.models.ProductModel;
 import com.techu.apitechu.services.ProductService;
 import com.techu.apitechu.utils.ProductEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class ProductController {
             return result.isPresent()
                     ? ResponseEntity.ok(result.get())
                     : new ResponseEntity<>(
-                            ProductWithException(ProductEnum.PRODUCT_NOT_FOUND.getMessage()),
+                            ProductWithException(ProductEnum.PRODUCT_NOT_FOUND.getMessage(), ProductEnum.PRODUCT_NOT_FOUND.getStatusCode()),
                             ProductEnum.PRODUCT_NOT_FOUND.getStatusCode()
             );
     }
@@ -58,7 +59,7 @@ public class ProductController {
             return ResponseEntity.ok(this.productService.createProduct(productModel));
         } catch (ProductException exception) {
             return new ResponseEntity<>(
-                    ProductWithException(exception.getMessage()),
+                    ProductWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
@@ -77,11 +78,11 @@ public class ProductController {
         System.out.printf("%n%s(%s)", LOCATOR, id);
 
         try {
-            return ResponseEntity.ok(productService.updateProduct(productModel));
-        } catch (ProductException ex) {
+            return ResponseEntity.ok(productService.updateProduct(productModel, id));
+        } catch (ProductException exception) {
             return new ResponseEntity<>(
-                    ProductWithException(ex.getMessage()),
-                    ex.getStatusCode()
+                ProductWithException(exception.getMessage(), exception.getStatusCode()),
+                exception.getStatusCode()
             );
         }
     }
@@ -102,7 +103,7 @@ public class ProductController {
             return ResponseEntity.ok(this.productService.patchProduct(productModel, id));
         } catch (ProductException exception) {
             return new ResponseEntity<>(
-                    ProductWithException(exception.getMessage()),
+                    ProductWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
@@ -120,13 +121,13 @@ public class ProductController {
             return ResponseEntity.ok(this.productService.deleteProduct(id));
         } catch (ProductException exception) {
             return new ResponseEntity<>(
-                    ProductWithException(exception.getMessage()),
+                    ProductWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
     }
 
-    private ProductModel ProductWithException(String message) {
-        return new ProductModel(message);
+    private ProductModel ProductWithException(String message, HttpStatus httpStatus) {
+        return new ProductModel(message, httpStatus);
     }
 }

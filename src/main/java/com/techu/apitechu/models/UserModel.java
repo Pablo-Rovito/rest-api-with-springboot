@@ -1,5 +1,7 @@
 package com.techu.apitechu.models;
 
+import org.springframework.http.HttpStatus;
+
 // TODO: id should be generated automatically
 public class UserModel extends GeneralModel {
     private String id;
@@ -9,8 +11,8 @@ public class UserModel extends GeneralModel {
     public UserModel() {
     }
 
-    public UserModel(String message) {
-        super(message);
+    public UserModel(String errorMessage, HttpStatus httpStatus) {
+        super(errorMessage, httpStatus);
     }
 
     public UserModel(String id, String name, Integer age) {

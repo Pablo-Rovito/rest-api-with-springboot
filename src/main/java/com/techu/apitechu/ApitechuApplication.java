@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 // TODO: implement interfaces!
 
@@ -16,38 +15,36 @@ public class ApitechuApplication {
 	public static ArrayList<ProductModel> productList;
 	public static ArrayList<UserModel> userList;
 	public static ArrayList<PurchaseModel> purchaseList;
-	public static HashMap<String, Float> priceList;
 	public static final String API_BASE_URL = "/apitechu/v3";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApitechuApplication.class, args);
-		ApitechuApplication.productList = ApitechuApplication.getTestModels();
+		ApitechuApplication.productList = ApitechuApplication.getProductList();
 		ApitechuApplication.userList = ApitechuApplication.getUserModels();
 		ApitechuApplication.purchaseList = ApitechuApplication.getPurchaseList();
-		ApitechuApplication.priceList = ApitechuApplication.getPricesList();
 	}
 
-	private static ArrayList<ProductModel> getTestModels() {
+	private static ArrayList<ProductModel> getProductList() {
 		ArrayList<ProductModel> products = new ArrayList<>();
 		products.add(
 				new ProductModel(
-						"0",
-						"Producto 0",
-						5f
+						"product-0",
+						"papa",
+						1f
 				)
 		);
 		products.add(
 				new ProductModel(
-						"10",
-						"Producto 10",
-						10f
+						"product-1",
+						"cebolla",
+						0.5f
 				)
 		);
 		products.add(
 				new ProductModel(
-						"20",
-						"Producto 20",
-						100f
+						"product-2",
+						"aji",
+						2f
 				)
 		);
 		return products;
@@ -56,25 +53,25 @@ public class ApitechuApplication {
 	private static ArrayList<UserModel> getUserModels() {
 		ArrayList<UserModel> users = new ArrayList<>();
 		users.add(
-				new UserModel("0", "Pablo", 34)
+				new UserModel("user-0", "Pablo", 34)
 		);
 		users.add(
-				new UserModel("10", "Eliana", 35)
+				new UserModel("user-1", "Eliana", 35)
 		);
 		users.add(
-				new UserModel("20", "Juan", 80)
+				new UserModel("user-2", "Juan", 80)
 		);
 		users.add(
-				new UserModel("30", "Eva", 72)
+				new UserModel("user-3", "Eva", 72)
 		);
 		users.add(
-				new UserModel("40", "José", 19)
+				new UserModel("user-4", "José", 19)
 		);
 		users.add(
-				new UserModel("50", "Juana", 23)
+				new UserModel("user-5", "Juana", 23)
 		);
 		users.add(
-				new UserModel("60", "Evelina", 72)
+				new UserModel("user-6", "Evelina", 72)
 		);
 
 		return users;
@@ -82,14 +79,5 @@ public class ApitechuApplication {
 
 	private static ArrayList<PurchaseModel> getPurchaseList() {
         return new ArrayList<>();
-	}
-
-	private static HashMap<String, Float> getPricesList() {
-		HashMap<String, Float> pricesList = new HashMap<>();
-		pricesList.put("papa", 1f);
-		pricesList.put("cebolla", 1.50f);
-		pricesList.put("ají", 3f);
-		pricesList.put("FerrariTestarossa", 150000f);
-		return pricesList;
 	}
 }

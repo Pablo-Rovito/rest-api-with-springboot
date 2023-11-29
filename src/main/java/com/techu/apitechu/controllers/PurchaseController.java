@@ -1,18 +1,18 @@
 package com.techu.apitechu.controllers;
 
-import com.techu.apitechu.ApitechuApplication;
 import com.techu.apitechu.models.PurchaseModel;
 import com.techu.apitechu.models.PurchaseRequest;
 import com.techu.apitechu.services.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.techu.apitechu.ApitechuApplication.API_BASE_URL;
+import java.util.List;
 
+import static com.techu.apitechu.ApitechuApplication.API_BASE_URL;
 
 @RestController
 public class PurchaseController {
@@ -30,6 +30,24 @@ public class PurchaseController {
         System.out.printf("  UserId: %s  ", purchaseRequest.getUserId());
         System.out.printf("  Items: %s  ", purchaseRequest.getPurchaseItems());
 
-        return ResponseEntity.ok(this.purchaseService.createPurchase(purchaseRequest));
+        PurchaseModel response = this.purchaseService.createPurchase(purchaseRequest);
+
+        if(response.getMessage() != null) {
+            return new ResponseEntity<>(
+                    response,
+                    response.getHttpStatus()
+            );
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(API_BASE_URL + "/purchase")
+    public ResponseEntity<List<PurchaseModel>> getPurchases() {
+        final String METHOD_NAME = "getPurchases";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s", LOCATOR);
+
+        return ResponseEntity.ok(this.purchaseService.getPurchases());
     }
 }

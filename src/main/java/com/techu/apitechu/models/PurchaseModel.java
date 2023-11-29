@@ -1,5 +1,7 @@
 package com.techu.apitechu.models;
 
+import org.springframework.http.HttpStatus;
+
 import java.util.Map;
 
 public class PurchaseModel extends GeneralModel {
@@ -9,8 +11,8 @@ public class PurchaseModel extends GeneralModel {
     private Float amount;
     private Map purchaseItems;
 
-    public PurchaseModel(String errorMessage) {
-        super(errorMessage);
+    public PurchaseModel(String errorMessage, HttpStatus httpStatus) {
+        super(errorMessage, httpStatus);
     }
 
     public PurchaseModel(String userId, Float amount, Map purchaseItems) {
@@ -24,28 +26,13 @@ public class PurchaseModel extends GeneralModel {
     public String getId() {
         return id;
     }
-
     public String getUserId() {
         return userId;
     }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public Float getAmount() {
         return amount;
     }
-
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
-
     public Map getPurchaseItems() {
         return purchaseItems;
-    }
-
-    public void setPurchaseItems(Map purchaseItems) {
-        this.purchaseItems = purchaseItems;
     }
 }

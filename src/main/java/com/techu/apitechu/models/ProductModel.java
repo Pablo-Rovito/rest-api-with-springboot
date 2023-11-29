@@ -1,5 +1,7 @@
 package com.techu.apitechu.models;
 
+import org.springframework.http.HttpStatus;
+
 // TODO: id should be generated automatically
 public class ProductModel extends GeneralModel {
     public String id;
@@ -9,8 +11,8 @@ public class ProductModel extends GeneralModel {
     public ProductModel() {
     }
 
-    public ProductModel(String errorMessage) {
-        super(errorMessage);
+    public ProductModel(String errorMessage, HttpStatus httpStatus) {
+        super(errorMessage, httpStatus);
     }
 
     public ProductModel(String id, String description, Float price) {

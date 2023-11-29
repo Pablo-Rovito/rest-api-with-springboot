@@ -4,6 +4,7 @@ import com.techu.apitechu.error.UserException;
 import com.techu.apitechu.models.UserModel;
 import com.techu.apitechu.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +41,7 @@ public class UserController {
     @PostMapping(API_BASE_URL + "/users")
     public ResponseEntity<UserModel> createUser(
             @RequestBody UserModel userModel
-    ) throws UserException {
+    ) {
         final String METHOD_NAME = "createUser";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
@@ -49,10 +50,19 @@ public class UserController {
         System.out.printf("  Name: %s  ", userModel.getName());
 
         try {
-            return ResponseEntity.ok(this.userService.createUser(userModel));
+            UserModel response = this.userService.createUser(userModel);
+
+            if(response.getMessage() != null) {
+                return new ResponseEntity<>(
+                        response,
+                        response.getHttpStatus()
+                );
+            }
+
+            return ResponseEntity.ok(response);
         } catch (UserException exception) {
             return new ResponseEntity<>(
-                    UserWithException(exception.getMessage()),
+                    UserWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
@@ -70,7 +80,7 @@ public class UserController {
             return ResponseEntity.ok(userService.updateUser(userModel, id));
         } catch (UserException exception) {
             return new ResponseEntity<>(
-                    UserWithException(exception.getMessage()),
+                    UserWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
@@ -87,14 +97,14 @@ public class UserController {
             return ResponseEntity.ok(this.userService.deleteUser(id));
         } catch (UserException exception) {
             return new ResponseEntity<>(
-                    UserWithException(exception.getMessage()),
+                    UserWithException(exception.getMessage(), exception.getStatusCode()),
                     exception.getStatusCode()
             );
         }
     }
 
-    private UserModel UserWithException(String message) {
-        return new UserModel(message);
+    private UserModel UserWithException(String message, HttpStatus httpStatus) {
+        return new UserModel(message, httpStatus);
     }
 
 }

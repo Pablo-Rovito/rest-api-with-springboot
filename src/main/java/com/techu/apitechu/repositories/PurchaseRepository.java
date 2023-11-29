@@ -5,6 +5,8 @@ import com.techu.apitechu.models.PurchaseModel;
 import com.techu.apitechu.utils.PurchaseEnum;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class PurchaseRepository {
     private final String NAME = this.getClass().getSimpleName();
@@ -21,7 +23,15 @@ public class PurchaseRepository {
         if(ApitechuApplication.purchaseList.add(purchaseModel)) {
             return purchaseModel;
         } else {
-            return new PurchaseModel(PurchaseEnum.PURCHASE_NOT_CREATED.getMessage());
+            return new PurchaseModel(PurchaseEnum.PURCHASE_NOT_CREATED.getMessage(), PurchaseEnum.PURCHASE_NOT_CREATED.getStatusCode());
         }
+    }
+
+    public List<PurchaseModel> getPurchases() {
+        final String METHOD_NAME = "getPurchase";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s", LOCATOR);
+
+        return ApitechuApplication.purchaseList;
     }
 }

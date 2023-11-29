@@ -13,7 +13,8 @@ public class ProductRepository {
 
     public List<ProductModel> findAll() {
         final String METHOD_NAME = "findAll";
-        final String LOCATOR = NAME + " - " + METHOD_NAME;        System.out.printf("%n%s", LOCATOR);
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s", LOCATOR);
 
         return ApitechuApplication.productList;
     }
@@ -37,19 +38,20 @@ public class ProductRepository {
         return ApitechuApplication.productList.add(productModel);
     }
 
-    public void updateProduct(ProductModel productModel) {
+    // TODO: Está roto updateProduct desde acá. Arreglar!!
+    public void updateProduct(ProductModel productModel, String id) {
         final String METHOD_NAME = "updateProduct";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
-        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
+        System.out.printf("%n%s with id = %s", LOCATOR, id);
 
-        int productIndex = ApitechuApplication.productList.indexOf(this.findById(productModel.getId()));
+        int productIndex = ApitechuApplication.productList.indexOf(this.findById(id).get());
         ApitechuApplication.productList.set(productIndex, productModel);
     }
 
     public ProductModel patchProduct(ProductModel productModel, String id) {
         final String METHOD_NAME = "patchProduct";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
-        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
+        System.out.printf("%n%s with id = %s", LOCATOR, id);
 
         ApitechuApplication.productList.forEach(
                 productInList -> {

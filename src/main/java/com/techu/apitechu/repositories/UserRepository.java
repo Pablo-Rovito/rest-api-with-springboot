@@ -44,10 +44,7 @@ public class UserRepository {
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s with id = %s", LOCATOR, id);
 
-        // just in case...
-        userModel.setId(id);
-
-        int productIndex = ApitechuApplication.userList.indexOf(this.getUsers(null, id));
+        int productIndex = ApitechuApplication.userList.indexOf(this.getUsers(null, id).get(0));
         ApitechuApplication.userList.set(productIndex, userModel);
     }
 

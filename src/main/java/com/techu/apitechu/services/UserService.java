@@ -35,18 +35,16 @@ public class UserService {
         List<UserModel> userById = this.getUsers(null, userModel.getId());
 
         if(!userById.isEmpty()) {
-            throw new UserException(
-                    LOCATOR,
-                    UserEnum.USER_ALREADY_IN_LIST.getMessage(),
-                    UserEnum.USER_ALREADY_IN_LIST.getStatusCode()
+            return new UserModel(
+                UserEnum.USER_ALREADY_IN_LIST.getMessage(),
+                UserEnum.USER_ALREADY_IN_LIST.getStatusCode()
             );
         }
 
         boolean success = userRepository.createUser(userModel);
 
         if(!success) {
-            throw new UserException(
-                    LOCATOR,
+            return new UserModel(
                     UserEnum.USER_NOT_CREATED.getMessage(),
                     UserEnum.USER_NOT_CREATED.getStatusCode()
             );

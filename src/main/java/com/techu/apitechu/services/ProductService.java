@@ -61,12 +61,12 @@ public class ProductService {
         return productModel;
     }
 
-    public ProductModel updateProduct(ProductModel productModel) throws ProductException {
+    public ProductModel updateProduct(ProductModel productModel, String id) throws ProductException {
         final String METHOD_NAME = "updateProduct";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
-        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
+        System.out.printf("%n%s with id = %s", LOCATOR, id);
 
-        Optional<ProductModel> productInList = this.findById(productModel.getId());
+        Optional<ProductModel> productInList = this.findById(id);
 
         if(productInList.isEmpty()) {
             throw new ProductException(
@@ -75,11 +75,11 @@ public class ProductService {
                     ProductEnum.PRODUCT_NOT_FOUND.getStatusCode()
             );
         }
-        // TODO: Should use id since I get it from controller, and not get it from productModel.
-        productRepository.updateProduct(productModel);
+
+        productRepository.updateProduct(productModel, id);
 
         // I need to make sure the change has been successful
-        if(!productModel.equals(this.findById(productModel.getId()).get())) {
+        if(!productModel.equals(this.findById(id).get())) {
             throw new ProductException(
                     LOCATOR,
                     ProductEnum.PRODUCT_NOT_UPDATED.getMessage(),
@@ -95,7 +95,7 @@ public class ProductService {
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s(%s)", LOCATOR, productModel.getId());
 
-        Optional<ProductModel> productInList = this.findById(productModel.getId());
+        Optional<ProductModel> productInList = this.findById(id);
 
         if(productInList.isEmpty()) {
             throw new ProductException(
