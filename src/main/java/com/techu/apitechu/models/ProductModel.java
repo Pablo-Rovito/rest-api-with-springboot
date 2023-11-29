@@ -8,8 +8,8 @@ public class ProductModel extends GeneralModel {
     public ProductModel() {
     }
 
-    public ProductModel(String message) {
-        super(message);
+    public ProductModel(String errorMessage) {
+        super(errorMessage);
     }
 
     public ProductModel(String id, String description, Float price) {

@@ -1,6 +1,8 @@
 package com.techu.apitechu.controllers;
 
+import com.techu.apitechu.ApitechuApplication;
 import com.techu.apitechu.models.PurchaseModel;
+import com.techu.apitechu.models.PurchaseRequest;
 import com.techu.apitechu.services.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +22,14 @@ public class PurchaseController {
 
     @PostMapping(API_BASE_URL + "/purchase")
     public ResponseEntity<PurchaseModel> createPurchase(
-            @RequestBody PurchaseModel purchaseModel
+            @RequestBody PurchaseRequest purchaseRequest
     ) {
         final String METHOD_NAME = "createPurchase";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
-        System.out.printf("  Id: %s  ", purchaseModel.getId());
-        System.out.printf("  UserId: %s  ", purchaseModel.getUserId());
-        System.out.printf("  Amount: %s  ", purchaseModel.getAmount());
-        System.out.printf("  Items: %s  ", purchaseModel.getPurchaseItems());
+        System.out.printf("  UserId: %s  ", purchaseRequest.getUserId());
+        System.out.printf("  Items: %s  ", purchaseRequest.getPurchaseItems());
 
-        return ResponseEntity.ok(this.purchaseService.createPurchase(purchaseModel));
+        return ResponseEntity.ok(this.purchaseService.createPurchase(purchaseRequest));
     }
 }

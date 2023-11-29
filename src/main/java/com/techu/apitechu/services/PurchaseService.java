@@ -1,6 +1,7 @@
 package com.techu.apitechu.services;
 
 import com.techu.apitechu.models.PurchaseModel;
+import com.techu.apitechu.models.PurchaseRequest;
 import com.techu.apitechu.repositories.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,15 @@ public class PurchaseService {
     @Autowired
     PurchaseRepository purchaseRepository;
 
-    public PurchaseModel createPurchase(PurchaseModel purchaseModel) {
+    public PurchaseModel createPurchase(PurchaseRequest purchaseRequest) {
         final String METHOD_NAME = "createPurchase";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
+
+        PurchaseModel purchaseModel = new PurchaseModel();
+
+        purchaseModel.setUserId(purchaseRequest.getUserId());
+        purchaseModel.setPurchaseItems(purchaseRequest.getPurchaseItems());
 
         return this.purchaseRepository.createPurchase(purchaseModel);
     }

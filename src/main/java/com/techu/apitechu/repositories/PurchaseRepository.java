@@ -13,6 +13,10 @@ public class PurchaseRepository {
         final String METHOD_NAME = "createPurchase";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
+        System.out.printf("  Id: %s  ", purchaseModel.getId());
+        System.out.printf("  UserId: %s  ", purchaseModel.getUserId());
+        System.out.printf("  Amount: %s  ", purchaseModel.getAmount());
+        System.out.printf("  Items: %s  ", purchaseModel.getPurchaseItems());
 
         if(ApitechuApplication.purchaseList.add(purchaseModel)) {
             return purchaseModel;
