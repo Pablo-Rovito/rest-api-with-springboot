@@ -1,16 +1,16 @@
 package com.techu.apitechu.models;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public class PurchaseRequest {
     private String userId;
-    private Map purchaseItems;
+    private HashMap<String, Float> purchaseItems;
 
     public String getUserId() {
         return userId;
     }
 
-    public Map getPurchaseItems() {
+    public HashMap<String, Float> getPurchaseItems() {
         return purchaseItems;
     }
 }

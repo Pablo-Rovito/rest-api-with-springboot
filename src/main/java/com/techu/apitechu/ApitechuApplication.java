@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // TODO: implement interfaces!
 
@@ -15,6 +16,7 @@ public class ApitechuApplication {
 	public static ArrayList<ProductModel> productList;
 	public static ArrayList<UserModel> userList;
 	public static ArrayList<PurchaseModel> purchaseList;
+	public static HashMap<String, Float> priceList;
 	public static final String API_BASE_URL = "/apitechu/v3";
 
 	public static void main(String[] args) {
@@ -22,6 +24,7 @@ public class ApitechuApplication {
 		ApitechuApplication.productList = ApitechuApplication.getTestModels();
 		ApitechuApplication.userList = ApitechuApplication.getUserModels();
 		ApitechuApplication.purchaseList = ApitechuApplication.getPurchaseList();
+		ApitechuApplication.priceList = ApitechuApplication.getPricesList();
 	}
 
 	private static ArrayList<ProductModel> getTestModels() {
@@ -79,5 +82,14 @@ public class ApitechuApplication {
 
 	private static ArrayList<PurchaseModel> getPurchaseList() {
         return new ArrayList<>();
+	}
+
+	private static HashMap<String, Float> getPricesList() {
+		HashMap<String, Float> pricesList = new HashMap<>();
+		pricesList.put("papa", 1f);
+		pricesList.put("cebolla", 1.50f);
+		pricesList.put("ají", 3f);
+		pricesList.put("FerrariTestarossa", 150000f);
+		return pricesList;
 	}
 }
