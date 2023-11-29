@@ -38,6 +38,9 @@ public class PurchaseService {
         if(!purchaseValidations.allItemsInProductList(
                 purchaseRequest.getPurchaseItems().keySet())
         ) {
+            // Esto se llama cláusula de guarda.
+            // Interrumpe el funcionamiento del código pero devuelve algo útil.
+            // Se podría poner N validaciones mapeando enum al mensaje/status que se cargan en la respuesta
             return new PurchaseModel(
                     PurchaseEnum.ILLEGAL_PRODUCTS.getMessage(),
                     PurchaseEnum.ILLEGAL_PRODUCTS.getStatusCode()
