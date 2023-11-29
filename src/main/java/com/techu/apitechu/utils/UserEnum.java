@@ -4,6 +4,8 @@ import com.techu.apitechu.validators.UserValidations;
 import org.springframework.http.HttpStatus;
 
 public enum UserEnum {
+    // TODO: incorporate error codes
+
     USER_ALREADY_IN_LIST ("A user with that ID already exists!", HttpStatus.METHOD_NOT_ALLOWED),
     USER_NOT_IN_LIST ("There isn´t a user with that ID!", HttpStatus.NOT_FOUND),
     USER_NOT_CREATED ("Couldn´t create user!", HttpStatus.INTERNAL_SERVER_ERROR),

@@ -3,6 +3,7 @@ package com.techu.apitechu.utils;
 import org.springframework.http.HttpStatus;
 
 public enum ProductEnum {
+    // TODO: incorporate error codes
     PRODUCT_NOT_DELETED ("Couldn´t delete product", HttpStatus.INTERNAL_SERVER_ERROR),
     PRODUCT_NOT_FOUND ("Product not found!", HttpStatus.NOT_FOUND),
     PRODUCT_ALREADY_IN_LIST ("A product with that ID already exists!", HttpStatus.METHOD_NOT_ALLOWED),

@@ -18,11 +18,11 @@ public class UserController {
     UserService userService;
 
     @GetMapping(API_BASE_URL + "/users")
-    public ResponseEntity<List<UserModel>> getUsersOfAge(
+    public ResponseEntity<List<UserModel>> getUsers(
             @RequestParam(required = false) String age,
             @RequestParam(required = false) String id
     ) {
-        final String METHOD_NAME = "getUsersOfAge";
+        final String METHOD_NAME = "getUsers";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s with age: %s and id: %s", LOCATOR, age, id);
 

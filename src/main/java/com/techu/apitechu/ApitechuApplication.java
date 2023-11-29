@@ -1,22 +1,27 @@
 package com.techu.apitechu;
 
 import com.techu.apitechu.models.ProductModel;
+import com.techu.apitechu.models.PurchaseModel;
 import com.techu.apitechu.models.UserModel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 
+// TODO: implement interfaces!
+
 @SpringBootApplication
 public class ApitechuApplication {
 	public static ArrayList<ProductModel> productList;
 	public static ArrayList<UserModel> userList;
-	public static final String API_BASE_URL = "/apitechu/v2";
+	public static ArrayList<PurchaseModel> purchaseList;
+	public static final String API_BASE_URL = "/apitechu/v3";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApitechuApplication.class, args);
 		ApitechuApplication.productList = ApitechuApplication.getTestModels();
-		ApitechuApplication.userList = ApitechuApplication.gerUserModels();
+		ApitechuApplication.userList = ApitechuApplication.getUserModels();
+		ApitechuApplication.purchaseList = ApitechuApplication.getPurchaseList();
 	}
 
 	private static ArrayList<ProductModel> getTestModels() {
@@ -45,7 +50,7 @@ public class ApitechuApplication {
 		return products;
 	}
 
-	private static ArrayList<UserModel> gerUserModels() {
+	private static ArrayList<UserModel> getUserModels() {
 		ArrayList<UserModel> users = new ArrayList<>();
 		users.add(
 				new UserModel("0", "Pablo", 34)
@@ -70,5 +75,9 @@ public class ApitechuApplication {
 		);
 
 		return users;
+	}
+
+	private static ArrayList<PurchaseModel> getPurchaseList() {
+        return new ArrayList<>();
 	}
 }
