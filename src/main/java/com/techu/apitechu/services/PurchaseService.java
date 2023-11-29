@@ -18,10 +18,7 @@ public class PurchaseService {
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-
-        purchaseModel.setUserId(purchaseRequest.getUserId());
-        purchaseModel.setPurchaseItems(purchaseRequest.getPurchaseItems());
+        PurchaseModel purchaseModel = new PurchaseModel(purchaseRequest.getUserId(), 0f, purchaseRequest.getPurchaseItems());
 
         return this.purchaseRepository.createPurchase(purchaseModel);
     }

@@ -1,5 +1,6 @@
 package com.techu.apitechu.models;
 
+// TODO: id should be generated automatically
 public class UserModel extends GeneralModel {
     private String id;
     private String name;

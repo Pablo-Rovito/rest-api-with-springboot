@@ -1,5 +1,6 @@
 package com.techu.apitechu.models;
 
+// TODO: id should be generated automatically
 public class ProductModel extends GeneralModel {
     public String id;
     private String description;

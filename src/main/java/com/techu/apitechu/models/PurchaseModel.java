@@ -9,11 +9,6 @@ public class PurchaseModel extends GeneralModel {
     private Float amount;
     private Map purchaseItems;
 
-    public PurchaseModel() {
-        this.id = String.format("purchase-%s", instances);
-        instances++;
-    }
-
     public PurchaseModel(String errorMessage) {
         super(errorMessage);
     }
