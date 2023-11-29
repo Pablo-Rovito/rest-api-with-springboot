@@ -1,7 +1,6 @@
 package com.techu.apitechu.repositories;
 
 import com.techu.apitechu.ApitechuApplication;
-import com.techu.apitechu.error.ProductException;
 import com.techu.apitechu.models.ProductModel;
 import org.springframework.stereotype.Repository;
 
@@ -10,29 +9,68 @@ import java.util.Optional;
 
 @Repository
 public class ProductRepository {
-    private final String NAME = "ProductRepository";
+    private final String NAME = this.getClass().getSimpleName();
 
     public List<ProductModel> findAll() {
-        System.out.printf("%n%s.findAll()", NAME);
+        final String METHOD_NAME = "findAll";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;        System.out.printf("%n%s", LOCATOR);
+
         return ApitechuApplication.productList;
     }
 
-    public ProductModel findById(String id) throws ProductException {
-        System.out.printf("%n%s.findById(%s)", NAME, id);
-        List<ProductModel> filteredList = ApitechuApplication.productList
-                        .stream()
-                        .filter(product -> id.equals(product.getId()))
-                        .toList();
+    public Optional<ProductModel> findById(String id) {
+        final String METHOD_NAME = "findById";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s(%s)", LOCATOR, id);
 
-        if(filteredList.isEmpty()) throw new ProductException(NAME + "-findById()", String.format("Couldn´t find ID %s", id));
-
-        return filteredList.get(0);
+        return ApitechuApplication.productList
+                .stream()
+                .filter(p -> id.equals(p.getId()))
+                .findAny();
     }
 
-    public Optional<ProductModel> createProduct(ProductModel productModel) {
-        System.out.printf("%n%s.createProduct() with id = %s", NAME, productModel.getId());
+    public boolean createProduct(ProductModel productModel) {
+        final String METHOD_NAME = "createProduct";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
 
-        ApitechuApplication.productList.add(productModel);
-        return Optional.of(productModel);
+        return ApitechuApplication.productList.add(productModel);
+    }
+
+    public void updateProduct(ProductModel productModel) {
+        final String METHOD_NAME = "updateProduct";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
+
+        int productIndex = ApitechuApplication.productList.indexOf(this.findById(productModel.getId()));
+        ApitechuApplication.productList.set(productIndex, productModel);
+    }
+
+    public ProductModel patchProduct(ProductModel productModel, String id) {
+        final String METHOD_NAME = "patchProduct";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s with id = %s", LOCATOR, productModel.getId());
+
+        ApitechuApplication.productList.forEach(
+                productInList -> {
+                    if (id.equals(productInList.getId())) {
+                        if(productModel.getDescription() != null) {
+                            productInList.setDescription(productModel.getDescription());
+                        }
+                        if(productModel.getPrice() != null) {
+                            productInList.setPrice(productModel.getPrice());
+                        }
+                    }
+                });
+        return productModel;
+    }
+
+    public boolean deleteProduct(String id) {
+        final String METHOD_NAME = "deleteProduct";
+        final String LOCATOR = NAME + " - " + METHOD_NAME;
+        System.out.printf("%n%s(%s)", LOCATOR, id);
+
+        // Product existence is checked in service
+        return ApitechuApplication.productList.removeIf(p -> id.equals(p.getId()));
     }
 }

@@ -1,20 +1,16 @@
 package com.techu.apitechu.models;
 
-public class GeneralResponse {
-    private String message;
+public class GeneralModel {
+    private String errorMessage;
 
-    public GeneralResponse() {
+    public GeneralModel() {
     }
 
-    public GeneralResponse(String message) {
-        this.message = message;
+    public GeneralModel(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        return errorMessage;
     }
 }

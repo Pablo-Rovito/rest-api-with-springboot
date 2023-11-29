@@ -1,6 +1,6 @@
 package com.techu.apitechu.models;
 
-public class ProductModel extends GeneralResponse{
+public class ProductModel extends GeneralModel {
     public String id;
     private String description;
     private Float price;
@@ -8,8 +8,11 @@ public class ProductModel extends GeneralResponse{
     public ProductModel() {
     }
 
-    public ProductModel(String id, String description, Float price, String message) {
+    public ProductModel(String message) {
         super(message);
+    }
+
+    public ProductModel(String id, String description, Float price) {
         this.id = id;
         this.description = description;
         this.price = price;
