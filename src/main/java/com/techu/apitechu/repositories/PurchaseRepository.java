@@ -1,10 +1,12 @@
 package com.techu.apitechu.repositories;
 
 import com.techu.apitechu.ApitechuApplication;
+import com.techu.apitechu.models.PaymentModel;
 import com.techu.apitechu.models.PurchaseModel;
 import com.techu.apitechu.utils.PurchaseEnum;
 import org.springframework.stereotype.Repository;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Repository

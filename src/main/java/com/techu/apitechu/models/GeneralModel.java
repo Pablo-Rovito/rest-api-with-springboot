@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class GeneralModel {
 
-    // TODO: add HttpMethod here so I can return messages and statuses instead of throwing errors everywhere
+    // TODO: turn this into a general service response, so abstract validations work better and can be iterated.
     private String errorMessage;
     private HttpStatus httpStatus;
 
@@ -16,8 +16,17 @@ public class GeneralModel {
         this.errorMessage = errorMessage;
     }
 
-    public String getMessage() {
+    public HttpStatus getHttpStatus() { return httpStatus; }
+
+    public String getErrorMessage() {
         return errorMessage;
     }
-    public HttpStatus getHttpStatus() { return httpStatus; }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
 }

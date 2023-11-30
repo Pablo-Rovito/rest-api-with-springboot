@@ -52,7 +52,7 @@ public class UserController {
         try {
             UserModel response = this.userService.createUser(userModel);
 
-            if(response.getMessage() != null) {
+            if(response.getErrorMessage() != null) {
                 return new ResponseEntity<>(
                         response,
                         response.getHttpStatus()

@@ -1,68 +1,46 @@
 package com.techu.apitechu.services;
 
+import com.techu.apitechu.models.PaymentModel;
 import com.techu.apitechu.models.PurchaseModel;
-import com.techu.apitechu.models.PurchaseRequest;
 import com.techu.apitechu.repositories.PurchaseRepository;
-import com.techu.apitechu.utils.PurchaseEnum;
-import com.techu.apitechu.validators.PurchaseValidations;
+import com.techu.apitechu.utils.PurchaseStatuses;
+import com.techu.apitechu.validators.IllegalProductsValidation;
+import com.techu.apitechu.validators.RegisteredPurchaseValidator;
+import com.techu.apitechu.validators.RegisteredUserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PurchaseService {
     private final String NAME = this.getClass().getSimpleName();
     @Autowired
-    PurchaseValidations purchaseValidations;
-    @Autowired
     PurchaseRepository purchaseRepository;
     @Autowired
     ProductService productService;
+    @Autowired
+    RegisteredUserValidation registeredUserValidation;
+    @Autowired
+    IllegalProductsValidation illegalProductsValidation;
+    @Autowired
+    RegisteredPurchaseValidator registeredPurchaseValidator;
 
-    public PurchaseModel createPurchase(PurchaseRequest purchaseRequest) {
+    public PurchaseModel createPurchase(PaymentModel payment) {
         final String METHOD_NAME = "createPurchase";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
 
-        if(!purchaseValidations.isRegisteredUser(purchaseRequest.getUserId())) {
-            return new PurchaseModel(
-                    PurchaseEnum.USER_NOT_REGISTERED.getMessage(),
-                    PurchaseEnum.USER_NOT_REGISTERED.getStatusCode()
-            );
+        // TODO: turn this into a list of AbstractPurchaseValidations
+        PurchaseModel newPurchase = registeredUserValidation.apply(payment, new PurchaseModel());
+         newPurchase = illegalProductsValidation.apply(payment, newPurchase);
+         newPurchase = registeredPurchaseValidator.apply(payment, newPurchase);
+
+        if(newPurchase.getErrorMessage() != null) {
+            return newPurchase;
         }
 
-        if(!purchaseValidations.allItemsInProductList(
-                purchaseRequest.getPurchaseItems().keySet())
-        ) {
-            // Esto se llama cláusula de guarda.
-            // Interrumpe el funcionamiento del código pero devuelve algo útil.
-            // Se podría poner N validaciones mapeando enum al mensaje/status que se cargan en la respuesta
-            return new PurchaseModel(
-                    PurchaseEnum.ILLEGAL_PRODUCTS.getMessage(),
-                    PurchaseEnum.ILLEGAL_PRODUCTS.getStatusCode()
-            );
-        }
-
-        PurchaseModel newPurchase = new PurchaseModel(
-                    purchaseRequest.getUserId(),
-                    calculateTotal(purchaseRequest.getPurchaseItems()),
-                    purchaseRequest.getPurchaseItems()
-        );
-
-        // this one doesn´t actually validate anything bc IDs are automatically generated.
-
-        if(purchaseValidations.purchaseIdAlreadyGenerated(newPurchase.getId())) {
-            return new PurchaseModel(
-                    PurchaseEnum.PURCHASE_ALREADY_REGISTERED.getMessage(),
-                    PurchaseEnum.PURCHASE_ALREADY_REGISTERED.getStatusCode()
-            );
-        }
-
-        return this.purchaseRepository.createPurchase(newPurchase);
+        return this.purchaseRepository.createPurchase(setPurchase(newPurchase, payment));
     }
 
 
@@ -92,5 +70,26 @@ public class PurchaseService {
         });
 
         return subTotals.stream().reduce(0f,Float::sum);
+    }
+
+    private PurchaseModel setPurchase(PurchaseModel purchase, PaymentModel payment) {
+
+        Float purchaseAmount = calculateTotal(payment.getPurchaseItems());
+        boolean paid = purchaseAmount <= payment.getAmount();
+        Calendar now = Calendar.getInstance();
+        Calendar dueDate = Calendar.getInstance();
+        dueDate.add(Calendar.DAY_OF_YEAR, purchase.getDaysPaymentDue());
+        ArrayList<PaymentModel> payments = new ArrayList<>();
+        payments.add(new PaymentModel(now.getTime(), payment.getAmount()));
+
+        purchase.setPurchaseItems(payment.getPurchaseItems());
+        purchase.setAmount(purchaseAmount);
+        purchase.setPurchaseDate(now.getTime());
+        purchase.setPaymentDate(paid ? now.getTime() : null);
+        purchase.setPayments(payments);
+        purchase.setLastPurchaseDate(paid ? null : dueDate.getTime());
+        purchase.setStatus(paid ? PurchaseStatuses.COMPLETED : PurchaseStatuses.PENDING);
+
+        return purchase;
     }
 }
