@@ -1,7 +1,7 @@
 package com.techu.apitechu.validators;
 
 import com.techu.apitechu.models.PaymentModel;
-import com.techu.apitechu.models.PurchaseModel;
+import com.techu.apitechu.models.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class ValidatePayment {
     @Autowired
     PaymentDateValidation paymentDateValidation;
 
-    public PurchaseModel validate(PaymentModel payment) {
+    public ValidationResponse validate(PaymentModel payment) {
         final String METHOD_NAME = "validate";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
@@ -27,12 +27,16 @@ public class ValidatePayment {
         validations.add(paymentDateValidation);
         validations.add(paymentAmountValidation);
 
-        PurchaseModel purchase = new PurchaseModel();
+        ValidationResponse response = new ValidationResponse();
 
         for (AbstractPaymentValidation validation : validations) {
-            purchase = validation.apply(payment);
+            response = validation.apply(payment);
+            if(!response.isSuccess()) {
+                return response;
+            }
+            break;
         }
 
-        return purchase;
+        return response;
     }
 }

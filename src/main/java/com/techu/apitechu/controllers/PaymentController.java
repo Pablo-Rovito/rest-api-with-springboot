@@ -2,10 +2,10 @@ package com.techu.apitechu.controllers;
 
 import com.techu.apitechu.models.PaymentModel;
 import com.techu.apitechu.models.PurchaseModel;
+import com.techu.apitechu.models.ValidationResponse;
 import com.techu.apitechu.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +25,11 @@ public class PaymentController {
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
 
-        return ResponseEntity.ok(this.paymentService.addPayment(payment));
+        ValidationResponse response = this.paymentService.addPayment(payment);
+
+        return new ResponseEntity<>(
+                response.isSuccess() ? response.getPayload() : new PurchaseModel(response.getMessages().get(0)),
+                response.getHttpStatus()
+        );
     }
 }

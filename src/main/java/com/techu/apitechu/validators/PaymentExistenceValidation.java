@@ -2,6 +2,7 @@ package com.techu.apitechu.validators;
 
 import com.techu.apitechu.models.PaymentModel;
 import com.techu.apitechu.models.PurchaseModel;
+import com.techu.apitechu.models.ValidationResponse;
 import com.techu.apitechu.services.PurchaseService;
 import com.techu.apitechu.utils.PurchaseEnum;
 import com.techu.apitechu.utils.PurchaseStatuses;
@@ -18,9 +19,11 @@ public class PaymentExistenceValidation extends AbstractPaymentValidation {
     PurchaseService purchaseService;
 
     @Override
-    public PurchaseModel apply(PaymentModel payment) {
+    public ValidationResponse apply(PaymentModel payment) {
         final String LOCATOR = NAME + " - apply()";
         System.out.printf("%n%s", LOCATOR);
+
+        ValidationResponse response = new ValidationResponse();
 
         List<PurchaseModel> purchaseList = this.purchaseService.getPurchases().stream()
                 .filter(p -> payment.getPurchaseId().equals(p.getId()))
@@ -28,12 +31,11 @@ public class PaymentExistenceValidation extends AbstractPaymentValidation {
                 .toList();
 
         if(purchaseList.isEmpty()) {
-            return new PurchaseModel(
-                    PurchaseEnum.PURCHASE_NOT_FOUND.getMessage(),
-                    PurchaseEnum.PURCHASE_NOT_FOUND.getStatusCode()
-            );
+            response.setSuccess(false);
+            response.addMessage(PurchaseEnum.PURCHASE_NOT_FOUND.getMessage());
+            response.setPayload(new PurchaseModel());
         }
 
-        return purchaseList.get(0);
+        return response;
     }
 }
