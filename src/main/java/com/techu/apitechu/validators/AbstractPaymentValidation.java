@@ -1,7 +1,6 @@
 package com.techu.apitechu.validators;
 
 import com.techu.apitechu.models.PaymentModel;
-import com.techu.apitechu.models.PurchaseModel;
 import com.techu.apitechu.models.ValidationResponse;
 import org.springframework.cglib.core.internal.Function;
 

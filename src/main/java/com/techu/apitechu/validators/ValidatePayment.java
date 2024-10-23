@@ -5,27 +5,22 @@ import com.techu.apitechu.models.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ValidatePayment {
     private final String NAME = this.getClass().getSimpleName();
+    /*
+    This Autowired should add automatically every AbstractPaymentValidation into the list.
+    Really like the analyzers from Visita técnica.
+    * */
     @Autowired
-    PaymentAmountValidation paymentAmountValidation;
-    @Autowired
-    PaymentExistenceValidation paymentExistenceValidation;
-    @Autowired
-    PaymentDateValidation paymentDateValidation;
+    private List<AbstractPaymentValidation> validations;
 
     public ValidationResponse validate(PaymentModel payment) {
         final String METHOD_NAME = "validate";
         final String LOCATOR = NAME + " - " + METHOD_NAME;
         System.out.printf("%n%s", LOCATOR);
-
-        ArrayList<AbstractPaymentValidation> validations = new ArrayList<>();
-        validations.add(paymentExistenceValidation);
-        validations.add(paymentDateValidation);
-        validations.add(paymentAmountValidation);
 
         ValidationResponse response = new ValidationResponse();
 
@@ -34,7 +29,6 @@ public class ValidatePayment {
             if(!response.isSuccess()) {
                 return response;
             }
-            break;
         }
 
         return response;

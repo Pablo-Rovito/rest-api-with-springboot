@@ -14,6 +14,7 @@ public class PurchaseModel extends GeneralModel {
     private String userId;
     private Float amount;
     private Map purchaseItems;
+    // TODO: Dates can be put into an object
     private Date purchaseDate;
     private Date lastPurchaseDate;
     private Date paymentDate;
